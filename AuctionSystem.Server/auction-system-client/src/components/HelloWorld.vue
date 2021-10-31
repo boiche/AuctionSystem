@@ -6,6 +6,7 @@
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
+    <div class="btn btn-success m-2" v-on:click="send()">Get controller</div>
     <h3>Installed CLI Plugins</h3>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
@@ -33,11 +34,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import axios from 'axios'
+const API_URL = 'https://localhost:44305/Home/Index'
 
-@Component
-export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
+export default {
+  data () {
+    return {
+      msg: 'Sample message'
+    }
+  },
+  methods: {
+    send () {
+      axios.get(API_URL)
+    }
+  }
 }
 </script>
 
