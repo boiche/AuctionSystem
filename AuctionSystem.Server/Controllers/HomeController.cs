@@ -8,14 +8,9 @@ using System.Linq;
 
 namespace AuctionSystem.Server.Controllers
 {
-    [EnableCors("defaultPolicy")]
-    public class HomeController : Controller
-    {
-        private AuctionSystemContext context;
-        public HomeController(AuctionSystemContext context)
-        {
-            this.context = context;
-        }
+    public class HomeController : BaseController
+    {    
+        public HomeController(AuctionSystemContext context) : base(context) { }        
         [HttpGet]
         public JsonResult Index()
         {

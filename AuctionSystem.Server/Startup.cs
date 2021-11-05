@@ -30,10 +30,13 @@ namespace AuctionSystem.Server
             services.AddSignalR();           
             services.AddCors(options =>
             {
-                options.AddPolicy(name: DefaultPolicy, builder =>
+                options.AddDefaultPolicy(builder =>
                 {
                     //In order that 44305 and 4735 don't work, use 8080 with running vue
-                    builder.WithOrigins("http://localhost:8080", "https://localhost:44305", "http://localhost:4735");
+                    builder.WithOrigins("http://localhost:8080", "http://localhost:8081", "https://localhost:44305", "http://localhost:4735")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
             services.AddControllers();
