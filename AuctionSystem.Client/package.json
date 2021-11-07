@@ -1,0 +1,57 @@
+{
+  "name": "auction-system.client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "description": "AuctionSystem.Client",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.10.2",
+    "axios": "^0.24.0",
+    "bootstrap": "^5.1.3",
+    "bootstrap-vue": "^2.21.2",
+    "js-sha256": "^0.9.0",
+    "vue": "^2.6.12",
+    "vue-router": "^3.5.3",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "4.5.13",
+    "@vue/cli-plugin-eslint": "4.5.13",
+    "@vue/cli-service": "4.5.13",
+    "babel-eslint": "10.1.0",
+    "eslint": "6.8.0",
+    "eslint-plugin-vue": "6.2.2",
+    "vue-template-compiler": "2.6.12"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

@@ -1,4 +1,7 @@
 using AuctionSystem.Data.Model;
+using AuctionSystem.Server.Services;
+using AuctionSystem.Server.Services.Interfaces;
+using AuctionSystem.Server.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +21,6 @@ namespace AuctionSystem.Server
 {
     public class Startup
     {
-        private readonly string DefaultPolicy = "defaultPolicy";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +29,7 @@ namespace AuctionSystem.Server
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
             services.AddSignalR();           
             services.AddCors(options =>
             {
@@ -43,6 +46,7 @@ namespace AuctionSystem.Server
             services.AddDbContext<AuctionSystemContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AuctionSystemConnectionString")));
+            services.AddScoped<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,10 +61,11 @@ namespace AuctionSystem.Server
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
+            //app.UseMiddleware<JWTMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}").RequireCors(DefaultPolicy);
+                endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");
             });
         }
     }

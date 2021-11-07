@@ -27,7 +27,7 @@ namespace AuctionSystem.Data.Model
 
         public string FullName { get; set; }
 
-        [JsonProperty(PropertyName = "Password")]
+        [JsonIgnore]
         public string Password { get; set; }
 
         [JsonProperty(PropertyName = "Email")]
