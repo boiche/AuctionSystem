@@ -32,13 +32,22 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\assets\styles\chatBox.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Auth\LoginComponent.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\Auth\RegisterComponent.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\chatBox.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\HelloWorld.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\models\chatBox.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\models\user.js">
@@ -47,7 +56,13 @@
     <Content Include="src\services\authService.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\services\chatService.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\store\auth.module.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\store\chat.module.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\store\index.js">
@@ -72,6 +87,7 @@
     <Folder Include="public\" />
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
+    <Folder Include="src\assets\styles\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\Auth\" />
     <Folder Include="src\models\" />

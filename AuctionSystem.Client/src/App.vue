@@ -7,8 +7,33 @@
             <router-link to="/Login">Login</router-link>
         </div>
         <router-view />
+        <div id="openChatBox" class="btn btn-info" v-on:click="open()">Open chat box</div>
+        <div class="row" style="align-self: flex-end">            
+        </div>
     </div>
 </template>
+
+<script>
+    export default {
+        methods: {
+            open() {
+                try {
+                    var user = localStorage.getItem("user");
+                } catch (e) {
+                    console.log('Please log in in order to use this functionality');
+                }                
+                this.$store.state.signalr.connection.invoke("SendMessage", user, '{ "Username": "some idiot" }', 'some message').catch(function (err) {
+                    return console.error(err.toString());
+                });
+            }
+        },
+        data() {
+            return {
+                chatBoxes: JSON.parse(localStorage.getItem('chatBoxes'))
+            }
+        }
+    }
+</script>
 
 <style>
     #app {

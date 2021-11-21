@@ -1,9 +1,10 @@
 ﻿using AuctionSystem.Data.Model;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace AuctionSystem.Server.Models.Http.Responses
 {
-    public class AuthenticateResponse
+    public class AuthenticateResponse : ActionResult
     {
         public Guid Id { get; set; }
         public string FullName { get; set; }

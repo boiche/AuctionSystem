@@ -1,4 +1,5 @@
 using AuctionSystem.Data.Model;
+using AuctionSystem.Server.Chat;
 using AuctionSystem.Server.Services;
 using AuctionSystem.Server.Services.Interfaces;
 using AuctionSystem.Server.Utils;
@@ -66,7 +67,8 @@ namespace AuctionSystem.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");
-            });
+                endpoints.MapHub<ChatHub>("/chat");
+            });            
         }
     }
 }

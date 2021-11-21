@@ -35,13 +35,13 @@ namespace AuctionSystem.Server.Controllers
 
         [HttpPost]
         [ActionName("Login")]
-        public AuthenticateResponse Login([FromBody] AuthenticateRequest request)
+        public ActionResult Login([FromBody] AuthenticateRequest request)
         {
             try
             {
                 var response = this.service.Login(request);
-                if (response.Id != null && response.Id != Guid.Empty) return response;
-                else return default;
+                if (response.Id != null && response.Id != Guid.Empty) return Ok(response);
+                else return Unauthorized(response);
             }
             catch (NullReferenceException)
             {
