@@ -6,19 +6,10 @@ const connection = new HubConnectionBuilder()
 
 connection.on("ReceiveMessage", function (username, recipient, message) {
     console.log(message);
-    var chatBoxes = JSON.parse(localStorage.getItem('chatBoxes'));
-    let index = chatBoxes.length == 0 ? -1 : chatBoxes.findIndex((x) => x.recipient == recipient);
-    if (index > -1) {
-        chatBoxes[index].visible = true;
-        chatBoxes[index].collapsed = false;
-    }
-    else {
-        chatBoxes.push(new ChatBox(username, recipient, true, false));
-        localStorage.setItem('chatBoxes', JSON.stringify(chatBoxes));
-    }
+    var li = document.createElement("li");
+    li.textContent = `${username}: ${message}`;
+    document.getElementById("chatBoxMessages").appendChild(li);
 });
-
-import ChatBox from '@/models/chatBox.js';
 
 export const signalr = {
     namespaced: true,

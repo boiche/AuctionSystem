@@ -31,7 +31,10 @@ namespace AuctionSystem.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
-            services.AddSignalR();           
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });           
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>

@@ -2,12 +2,12 @@
     <div id="app">
         <div id="nav">
             <router-link to="/">Home</router-link> |
-            <router-link to="/about">About</router-link>
-            <router-link to="/Register">Register</router-link>
-            <router-link to="/Login">Login</router-link>
+            <router-link to="/about">About</router-link> |
+            <router-link to="/Register">Register</router-link> |
+            <router-link to="/Login">Login</router-link> |
+            <router-link to="/Direct">Chats</router-link>
         </div>
         <router-view />
-        <div id="openChatBox" class="btn btn-info" v-on:click="open()">Open chat box</div>
         <div class="row" style="align-self: flex-end">            
         </div>
     </div>
