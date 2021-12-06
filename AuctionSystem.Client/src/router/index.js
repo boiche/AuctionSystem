@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import Direct from '../views/Direct.vue'
 import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
+import UserProfile from '../views/UserProfile.vue'
+import Auction from '../views/Auction.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +37,16 @@ const routes = [
         path: '/Register',
         name: 'Register',
         component: Register
+    },
+    {
+        path: '/userProfile/:username',
+        name: 'userProfile',
+        component: UserProfile
+    },
+    {
+        path: '/Auction',
+        name: 'Action',
+        component: Auction
     }
 ]
 
@@ -42,6 +54,7 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
+
 
 router.beforeEach((from, to, next) => {
     if (from.meta.requiresAuth) {

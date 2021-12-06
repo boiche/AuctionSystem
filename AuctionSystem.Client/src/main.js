@@ -8,6 +8,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './services/chatService.js'
 
+import {
+    NavbarPlugin
+} from 'bootstrap-vue'
+Vue.use(NavbarPlugin)
+
 Vue.prototype.$axios = axios
 Vue.use(BootstrapVue).use(IconsPlugin)
 Vue.config.productionTip = false

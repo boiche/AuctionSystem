@@ -1,19 +1,27 @@
 <template>
     <div id="app">
         <div id="nav">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/about">About</router-link> |
-            <router-link to="/Register">Register</router-link> |
-            <router-link to="/Login">Login</router-link> |
-            <router-link to="/Direct">Chats</router-link>
+                <b-navbar id="navbar" type="light" variant="light">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="nav-item"><router-link class="nav-link" to="/">Home</router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/about">About</router-link></li>
+                        <li class="nav-item" v-if="loggedIn"> <router-link class="nav-link" to="/Direct">Chats</router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/login">{{loggedIn ? 'Profile' : 'Login'}}</router-link></li>
+                        <li class="nav-item" v-if="loggedIn"><LogoutButton></LogoutButton></li>
+                    </ul>
+                </b-navbar>
         </div>
         <router-view />
-        <div class="row" style="align-self: flex-end">            
-        </div>
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>{{ new Date().getFullYear() }} - <strong>Auction System</strong></p>
+            </div>
+        </footer>
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
+    import LogoutButton from './components/Auth/LogoutButton.vue'
     export default {
         methods: {
             open() {
@@ -21,7 +29,7 @@
                     var user = localStorage.getItem("user");
                 } catch (e) {
                     console.log('Please log in in order to use this functionality');
-                }                
+                }
                 this.$store.state.signalr.connection.invoke("SendMessage", user, '{ "Username": "some idiot" }', 'some message').catch(function (err) {
                     return console.error(err.toString());
                 });
@@ -29,8 +37,17 @@
         },
         data() {
             return {
-                chatBoxes: JSON.parse(localStorage.getItem('chatBoxes'))
+                chatBoxes: JSON.parse(localStorage.getItem('chatBoxes')),
+                
             }
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn
+            }
+        },
+        components: {
+            LogoutButton
         }
     }
 </script>
@@ -44,16 +61,20 @@
         color: #2c3e50;
     }
 
-    #nav {
-        padding: 30px;
-    }
-
     #nav a {
         font-weight: bold;
         color: #2c3e50;
     }
 
     #nav a.router-link-exact-active {
-        color: #42b983;
+            color: #42b983;
+    }
+
+    footer {
+        background-color: #42b983;
+        width: 100%;
+        height: 50px;
+        margin-top: 30px;
+        padding: 13px;
     }
 </style>

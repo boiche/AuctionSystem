@@ -27,7 +27,8 @@ class AuthService {
     }
 
     logout() {
-        localStorage.removeItem('user')
+        localStorage.removeItem('user');
+        router.push('/Login')
     }
 }
 

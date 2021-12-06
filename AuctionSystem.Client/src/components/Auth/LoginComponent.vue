@@ -22,6 +22,8 @@
                 </div>
             </form>
         </div>
+        <p>Don't have an account yet? <router-link to="/register">Sign up</router-link></p>
+       
     </div>
 </template>
 
@@ -52,7 +54,8 @@ export default {
       if (this.user.username && this.user.password) {
           this.$store.dispatch('auth/login', this.user).then(
             () => {
-                console.log('user logged in successfully. check local storage vor key user')
+                  console.log('user logged in successfully. check local storage vor key user');
+                  this.$router.push('/')
                 //TODO: navigate to content on successful login (logged in index page or user ptofile page)
               //this.$router.push({ name: 'userProfile', params: { username: this.$store.state.auth.user.username } })
             }, 
@@ -77,13 +80,14 @@ export default {
     }
 
     .card-container.card {
-        max-width: 350px !important;
-        padding: 40px 40px;
+        width: 33%;
+        margin-left: 33%;
+        padding: 40px;
     }
 
     .card {
         background-color: #f7f7f7;
-        padding: 20px 25px 30px;
+        padding: 20px;
         margin: 0 auto 25px;
         margin-top: 50px;
         -moz-border-radius: 2px;
@@ -95,12 +99,12 @@ export default {
     }
 
     .profile-img-card {
-        width: 96px;
-        height: 96px;
-        margin: 0 auto 10px;
-        display: block;
-        -moz-border-radius: 50%;
-        -webkit-border-radius: 50%;
+        width: 40%;
+        margin:10px;
+        margin-left: 30%;
         border-radius: 50%;
+    }
+    button{
+        margin-top: 20px;
     }
 </style>

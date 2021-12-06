@@ -38,6 +38,9 @@
     <Content Include="src\components\Auth\LoginComponent.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\Auth\LogoutButton.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Auth\RegisterComponent.vue">
       <SubType>Code</SubType>
     </Content>
@@ -47,10 +50,22 @@
     <Content Include="src\components\HelloWorld.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\navbar.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\userProfile.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\models\auction.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\models\chatBox.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\models\user.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\services\auctionService.js">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\services\authService.js">
@@ -71,6 +86,9 @@
     <Content Include="src\views\About.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\views\Auction.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\views\Auth\Register.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -84,10 +102,14 @@
     <Content Include="src\views\Home.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\views\UserProfile.vue">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dist\" />
     <Folder Include="public\" />
+    <Folder Include="public\pictures\" />
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\assets\styles\" />

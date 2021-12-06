@@ -121,6 +121,7 @@
         flex: 1;
         border-radius: 4px;
         border: 1px solid #ff9800;
+        padding-left: 5px;
     }
 
     #name {
@@ -134,10 +135,10 @@
         background: #ff9800;
         border: 2px solid #e65100;
         color: white;
-        padding: 4px 10px;
         font-weight: bold;
         border-radius: 4px;
-        cursor: pointer !important
+        cursor: pointer !important;
+        margin-left: 10px;
     }
 
     .error {
