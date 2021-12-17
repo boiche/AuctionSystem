@@ -12,6 +12,9 @@
                     <input v-model="user.password" type="password" class="form-control" name="password" required />
                 </div>
                 <div class="form-group">
+                    <ReCaptcha @validate="validate"></ReCaptcha>
+                </div>
+                <div class="form-group">
                     <button class="btn btn-primary btn-block" :disabled="loading">
                         <span v-show="loading" class="spinner-border spinner-border-sm"></span>
                         <span>Login</span>
@@ -28,49 +31,57 @@
 </template>
 
 <script>
-import User from '../../models/user.js'
-export default {
-  name: 'Login',
-  data () {
-    return {
-      user: new User('', ''),
-      loading: false,
-      message: ''
-    }
-  },
-  computed: {
-    loggedIn () {
-      return this.$store.state.auth.status.loggedIn
-    }
-  },
-  created () {
-    if (this.loggedIn) {
-      this.$router.push({ name: 'userProfile', params: { username: this.$store.state.auth.user.username } })
-    }
-  },
-  methods: {
-    handleLogin () {
-      this.loading = true
-      if (this.user.username && this.user.password) {
-          this.$store.dispatch('auth/login', this.user).then(
-            () => {
-                  console.log('user logged in successfully. check local storage vor key user');
-                  this.$router.push('/')
-                //TODO: navigate to content on successful login (logged in index page or user ptofile page)
-              //this.$router.push({ name: 'userProfile', params: { username: this.$store.state.auth.user.username } })
-            }, 
-            error => {
-              this.loading = false
-              this.message =
-                (error.response && error.response.data) ||
-                error.message ||
-                error.toString()
+    import User from '../../models/user.js'
+    import ReCaptcha from '@/components/Auth/ReCaptcha.vue'
+    export default {
+        name: 'Login',
+        components: {
+            ReCaptcha
+        },
+        data() {
+            return {
+                user: new User('', ''),
+                loading: false,
+                message: '',
+                validateRecaptcha: false
             }
-          )
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn
+            }
+        },
+        created() {
+            if (this.loggedIn) {
+                this.$router.push({ name: 'userProfile', params: { username: this.$store.state.auth.user.username } })
+            }
+        },
+        methods: {
+            validate(success) {
+                this.validateRecaptcha = success
+            },
+            handleLogin() {
+                this.loading = true
+                if (this.user.username && this.user.password) {
+                    this.$store.dispatch('auth/login', this.user).then(
+                        () => {
+                            console.log('user logged in successfully. check local storage vor key user');
+                            this.$router.push('/')
+                            //TODO: navigate to content on successful login (logged in index page or user ptofile page)
+                            //this.$router.push({ name: 'userProfile', params: { username: this.$store.state.auth.user.username } })
+                        },
+                        error => {
+                            this.loading = false
+                            this.message =
+                                (error.response && error.response.data) ||
+                                error.message ||
+                                error.toString()
+                        }
+                    )
+                }
+            }
         }
     }
-  }
-}
 </script>
 
 <style scoped>
