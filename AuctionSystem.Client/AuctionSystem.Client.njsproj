@@ -31,8 +31,12 @@
   <ItemGroup>
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
+    <Content Include="src\assets\pictures\auction.jpg" />
     <Content Include="src\App.vue" />
     <Content Include="src\assets\styles\chatBox.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\auctionLink.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\Auth\LoginComponent.vue">
@@ -46,6 +50,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\chatBox.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\Countdown.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\HelloWorld.vue">
@@ -114,6 +121,7 @@
     <Folder Include="public\pictures\" />
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
+    <Folder Include="src\assets\pictures\" />
     <Folder Include="src\assets\styles\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\Auth\" />

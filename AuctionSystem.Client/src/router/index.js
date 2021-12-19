@@ -44,7 +44,7 @@ const routes = [
         component: UserProfile
     },
     {
-        path: '/Auction',
+        path: '/Auction/:id',
         name: 'Action',
         component: Auction
     }

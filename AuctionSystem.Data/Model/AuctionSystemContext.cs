@@ -5,7 +5,11 @@
 namespace AuctionSystem.Data.Model
 {
     public partial class AuctionSystemContext : DbContext
-    { 
+    {
+        public AuctionSystemContext()
+        {
+        }
+
         public AuctionSystemContext(DbContextOptions<AuctionSystemContext> options)
             : base(options)
         {
@@ -13,9 +17,18 @@ namespace AuctionSystem.Data.Model
 
         public virtual DbSet<Auction> Auctions { get; set; }
         public virtual DbSet<AuctionState> AuctionStates { get; set; }
+        public virtual DbSet<Bid> Bids { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=AuctionSystem;Integrated Security=True;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +75,31 @@ namespace AuctionSystem.Data.Model
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Bid>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.AuctionId).HasColumnName("AuctionID");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.Auction)
+                    .WithMany(p => p.Bids)
+                    .HasForeignKey(d => d.AuctionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Bids_Auctions");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Bids)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Bids_Users");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -151,7 +189,6 @@ namespace AuctionSystem.Data.Model
             });
 
             OnModelCreatingPartial(modelBuilder);
-            base.OnModelCreating(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

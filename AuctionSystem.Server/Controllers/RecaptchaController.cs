@@ -11,7 +11,7 @@ namespace AuctionSystem.Server.Controllers
     [Route("/recaptcha")]
     public class RecaptchaController : BaseController
     {
-        private IConfiguration Configuration;
+        private readonly IConfiguration Configuration;
         public RecaptchaController(IConfiguration configuration)
         {
             Configuration = configuration;

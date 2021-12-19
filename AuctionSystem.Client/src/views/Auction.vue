@@ -1,25 +1,50 @@
 <template>
     <div id="wrapper">
-        <h1>Auction.Title</h1>
+        <h1>{{auction.title}}</h1>
         <h2>
-            <!--<Countdown end="Auction.PublishedOn.getDate()+7"></Countdown>-->
-            <Countdown end="12 25, 2021"></Countdown>
+            <Countdown :date="auction.publishedOn"></Countdown>
         </h2>
-        <!--<img :src="'../../public/pictures/'+Auction.picture.toString()" />-->
-        <img id="auctionPic" src="../../public/pictures/auction.jpg" />
-        <p>Auction.Description</p>
+        <img id="auctionPic" src="@/assets/pictures/auction.jpg" />
+        <p>{{auction.description}}</p>
         <div class="formInput">
-            <input type="number" id="usermsg" />
-            <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid">Bid</div>
+            <input v-model="amount" step="0.01" min="0" type="number" id="usermsg" />
+            <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid" v-on:click="placeBid">Bid</div>
         </div>
     </div>
 </template>
 
 <script>
-    import Countdown from 'vuejs-countdown'
+    import Countdown from '@/components/Countdown.vue';
+    import Auction from '@/models/auction.js'
+    import AuctionService from '@/services/auctionService.js'
 
     export default {
-        components: { Countdown }
+        components: { Countdown },
+        data() {
+            return {
+                auction: null,
+                amount: 0
+            }
+        },
+        async created() {
+            var result = await AuctionService.getById(this.$route.params.id);
+            this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount);
+        },
+        methods: {
+            async placeBid() {
+                console.log(this.auction.leadingBid);
+                if (this.amount <= this.auction.leadingBid) {
+                    this.$toastr.w('Your bid is too small');
+                    return;
+                }
+                await AuctionService.placeBid(this.auction.id, this.amount);
+                //TODO: show error message when bid was not created (amount was smaller than highest bid)
+                this.$toastr.s('Bid placed successfully');
+                var result = await AuctionService.getById(this.$route.params.id);
+                this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount);
+                console.log(this.auction.leadingBid);
+            }
+        }
     }
 </script>
 <style>

@@ -23,7 +23,6 @@ namespace AuctionSystem.Server.Services
 
             var response = await client.PostAsync(configuration.GetValue(typeof(string), "RECAPTCHA_GOOGLE_URL").ToString(), content);
 
-            var recaptchaResponse = new RecaptchaResponse();
             return await response.Content.ReadAsStringAsync();
 
         }

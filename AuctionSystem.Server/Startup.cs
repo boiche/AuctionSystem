@@ -65,7 +65,7 @@ namespace AuctionSystem.Server
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
-            //app.UseMiddleware<JWTMiddleware>();
+            app.UseMiddleware<JWTMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

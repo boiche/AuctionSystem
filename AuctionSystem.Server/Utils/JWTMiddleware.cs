@@ -1,4 +1,5 @@
 ﻿using AuctionSystem.Server.Services;
+using AuctionSystem.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -21,7 +22,7 @@ namespace AuctionSystem.Server.Utils
             _jwtSettings = options.Value;
         }
 
-        public async Task Invoke(HttpContext context, UserService userService)
+        public async Task Invoke(HttpContext context, IUserService userService)
         {
             string token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
@@ -33,7 +34,7 @@ namespace AuctionSystem.Server.Utils
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, UserService userService, string token)
+        private void AttachUserToContext(HttpContext context, IUserService userService, string token)
         {
             try
             {

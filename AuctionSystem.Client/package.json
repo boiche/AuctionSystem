@@ -24,6 +24,7 @@
     "vue-quick-chat": "^1.2.8",
     "vue-recaptcha": "^2.0.1",
     "vue-router": "^3.5.3",
+    "vue-toastr": "^2.1.2",
     "vuejs-countdown": "^0.2.1",
     "vuex": "^3.6.2"
   },

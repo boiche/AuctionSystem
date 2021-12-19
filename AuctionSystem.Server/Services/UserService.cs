@@ -47,6 +47,10 @@ namespace AuctionSystem.Server.Services
 
         public User GetById(Guid id)
         {
+            if (context == null)
+            {
+                context = new AuctionSystemContext();
+            }
             return context.Users.FirstOrDefault(x => x.Id == id);
         }
 
@@ -60,6 +64,7 @@ namespace AuctionSystem.Server.Services
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+            
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
