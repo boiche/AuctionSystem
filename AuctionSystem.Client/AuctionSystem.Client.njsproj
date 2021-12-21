@@ -49,6 +49,9 @@
     <Content Include="src\components\Auth\RegisterComponent.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\BidInfo.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\chatBox.vue">
       <SubType>Code</SubType>
     </Content>

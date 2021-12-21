@@ -21,6 +21,14 @@ class AuctionService {
         return result;
     }
 
+    async getBids(auctionId) {
+        var result;
+        await axios.get('https://localhost:44305/Auction/GetBids', { params: { auctionId: auctionId } }).then(function (response) {
+            result = response.data.bids;
+        });
+        return result;
+    }
+
     async placeBid(id, amount) {
         var form = new FormData();
         form.append('auctionId', id);

@@ -1,14 +1,20 @@
 <template>
-    <div id="wrapper">
-        <h1>{{auction.title}}</h1>
-        <h2>
-            <Countdown :date="auction.publishedOn"></Countdown>
-        </h2>
-        <img id="auctionPic" src="@/assets/pictures/auction.jpg" />
-        <p>{{auction.description}}</p>
-        <div class="formInput">
-            <input v-model="amount" step="0.01" min="0" type="number" id="usermsg" />
-            <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid" v-on:click="placeBid">Bid</div>
+    <div>
+        <div id="wrapper">
+            <h1>{{auction.title}}</h1>
+            <h2>
+                <Countdown :date="auction.publishedOn"></Countdown>
+            </h2>
+            <img id="auctionPic" src="@/assets/pictures/auction.jpg" />
+            <p>{{auction.description}}</p>
+            <div class="formInput">
+                <input v-model="amount" step="0.01" min="0" type="number" id="usermsg" />
+                <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid" v-on:click="placeBid">Bid</div>
+            </div>
+        </div>
+        <div id="wrapper" class="col-4">
+            <h1>Recent bids</h1>
+            <BidInfo v-for="bid in bids" v-bind:key="bid.id" :user="bid.user.username" :amount="bid.amount" :datetime="bid.createdOn"></BidInfo>
         </div>
     </div>
 </template>
@@ -17,19 +23,44 @@
     import Countdown from '@/components/Countdown.vue';
     import Auction from '@/models/auction.js'
     import AuctionService from '@/services/auctionService.js'
+    import BidInfo from '@/components/BidInfo.vue'
 
     export default {
-        components: { Countdown },
+        components: { Countdown, BidInfo },
         data() {
             return {
+                bids: new Array(),
                 auction: null,
-                amount: 0
+                amount: 0,
+                refreshBids: null
             }
         },
         async created() {
             var result = await AuctionService.getById(this.$route.params.id);
             this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount);
+            this.refreshBids = async function refreshBids() {
+                this.bids = await AuctionService.getBids(result.auction.id);
+            };
+            await this.refreshBids();
+            this.bids.map(x => {
+                var date = new Date(x.createdOn);
+
+                var hours = date.getHours().toString();
+                if (hours.length <= 1) hours = "0" + hours;
+
+                var minutes = date.getMinutes().toString();
+                if (minutes.length <= 1) minutes = "0" + minutes;
+
+                var seconds = date.getSeconds().toString();
+                if (seconds.length <= 1) seconds = "0" + seconds;
+
+                x.createdOn = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()} ${hours}:${minutes}:${seconds}`;
+            });            
+            //setInterval(this.refreshBids, 5000);
         },
+        //beforeUnmount() {
+        //    clearInterval(this.refreshBids);
+        //},
         methods: {
             async placeBid() {
                 console.log(this.auction.leadingBid);

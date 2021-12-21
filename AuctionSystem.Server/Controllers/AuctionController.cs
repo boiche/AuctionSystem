@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using AutoMapper;
 using System;
-using Newtonsoft.Json;
+using System.Data.Entity;
 
 namespace AuctionSystem.Server.Controllers
 {
@@ -20,6 +20,17 @@ namespace AuctionSystem.Server.Controllers
         {
             var auctions = context.Auctions.OrderByDescending(x => x.PublishedOn).Take(9).ToList();
             return Json(new { auctions });
+        }
+
+        [HttpGet]
+        public JsonResult GetBids(Guid auctionId)
+        {
+            var bids = context.Bids.Where(x => auctionId == x.AuctionId).OrderByDescending(x => x.CreatedOn).Take(5).ToList();
+            bids.ForEach(x =>
+            {
+                x.User = new User() { Username = context.Users.First(y => y.Id == x.UserId).Username };
+            });
+            return Json(new { bids });
         }
 
         [HttpGet]
