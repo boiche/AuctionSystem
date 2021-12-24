@@ -13,6 +13,7 @@ import {
     NavbarPlugin
 } from 'bootstrap-vue'
 Vue.use(NavbarPlugin)
+Vue.use(require('vue-moment'));
 
 axios.interceptors.request.use(function (config) {
     var userCredentials = localStorage.getItem('user');

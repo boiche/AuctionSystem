@@ -1,8 +1,8 @@
 <template>
     <div class="home">
         <h1>Active auctions</h1>
-        <div class="wrapper" >
-            <AuctionLink v-for="auction in auctions.auctions" v-bind:key="auction.id" :id="auction.id" :title="auction.title"></AuctionLink>
+        <div class="wrapper" v-for="auction in auctions.auctions" v-bind:key="auction.id">
+            <AuctionLink :id="auction.id" :title="auction.title"></AuctionLink>
         </div>
         
     </div>
@@ -39,11 +39,8 @@
         padding: 10px;
         color: #2c3e50;
     }
-
     #auctionPic {
         width: 80%;
         padding: 10px;
     }
-
-
 </style>

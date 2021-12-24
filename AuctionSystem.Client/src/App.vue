@@ -1,22 +1,23 @@
 <template>
     <div id="app">
-        <div id="nav">
+        <div id="content-wrap">
+            <div id="nav">
                 <b-navbar id="navbar" type="light" variant="light">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="nav-item"><router-link class="nav-link" to="/">Home</router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/about">About</router-link></li>
-                        <li class="nav-item" v-if="loggedIn"> <router-link class="nav-link" to="/Direct">Chats</router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/login">{{loggedIn ? 'Profile' : 'Login'}}</router-link></li>
                         <li class="nav-item" v-if="loggedIn"><LogoutButton></LogoutButton></li>
                     </ul>
                 </b-navbar>
-        </div>
-        <router-view />
-        <footer class="footer">
-            <div class="content has-text-centered">
-                <p>{{ new Date().getFullYear() }} - <strong>Auction System</strong></p>
             </div>
-        </footer>
+            <router-view />
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>{{ new Date().getFullYear() }} - <strong>Auction System</strong></p>
+                </div>
+            </footer>
+         </div>
     </div>
 </template>
 
@@ -59,8 +60,12 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
+        position: relative;
+        min-height: 100vh;
     }
-
+    #content-wrap {
+        padding-bottom: 5rem;
+    }
     #nav a {
         font-weight: bold;
         color: #2c3e50;
@@ -73,8 +78,9 @@
     footer {
         background-color: #42b983;
         width: 100%;
-        height: 50px;
-        margin-top: 30px;
         padding: 13px;
+        position: absolute;
+        bottom: 0;
+        height: 3rem;
     }
 </style>

@@ -3,10 +3,10 @@
         <div id="wrapper">
             <h1>{{auction.title}}</h1>
             <h2>
-                <Countdown :date="auction.publishedOn"></Countdown>
+                <Countdown :date="expiringOn"></Countdown>
             </h2>
             <img id="auctionPic" src="@/assets/pictures/auction.jpg" />
-            <p>{{auction.description}}</p>
+            <p style="font-size:20px">{{auction.description}}</p>
             <div class="formInput">
                 <input v-model="amount" step="0.01" min="0" type="number" id="usermsg" />
                 <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid" v-on:click="placeBid">Bid</div>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import moment from 'moment'
     import Countdown from '@/components/Countdown.vue';
     import Auction from '@/models/auction.js'
     import AuctionService from '@/services/auctionService.js'
@@ -31,6 +32,7 @@
             return {
                 bids: new Array(),
                 auction: null,
+                expiringOn: moment(),
                 amount: 0,
                 refreshBids: null
             }
@@ -38,23 +40,13 @@
         async created() {
             var result = await AuctionService.getById(this.$route.params.id);
             this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount);
+            this.expiringOn = moment(this.auction.publishedOn).add(7, 'days').format('MM.D.YYYY')
             this.refreshBids = async function refreshBids() {
                 this.bids = await AuctionService.getBids(result.auction.id);
             };
             await this.refreshBids();
             this.bids.map(x => {
-                var date = new Date(x.createdOn);
-
-                var hours = date.getHours().toString();
-                if (hours.length <= 1) hours = "0" + hours;
-
-                var minutes = date.getMinutes().toString();
-                if (minutes.length <= 1) minutes = "0" + minutes;
-
-                var seconds = date.getSeconds().toString();
-                if (seconds.length <= 1) seconds = "0" + seconds;
-
-                x.createdOn = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()} ${hours}:${minutes}:${seconds}`;
+                x.createdOn = moment(x.createdOn).format('do.MMM.YY HH:mm');
             });            
             //setInterval(this.refreshBids, 5000);
         },
