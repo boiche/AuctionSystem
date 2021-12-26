@@ -6,6 +6,7 @@ import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
 import UserProfile from '../views/UserProfile.vue'
 import Auction from '../views/Auction.vue'
+import Admin from '@/components/Admin/AdminIndex.vue'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,11 @@ const routes = [
         path: '/Auction/:id',
         name: 'Action',
         component: Auction
+    },
+    {
+        path: '/Admin',
+        name: 'Admin',
+        component: Admin
     }
 ]
 

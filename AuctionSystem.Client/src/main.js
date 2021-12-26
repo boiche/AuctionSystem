@@ -4,15 +4,11 @@ import router from './router'
 import store from './store'
 import * as axios from 'axios'
 import VueToastr from "vue-toastr";
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin, ModalPlugin, NavbarPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './services/chatService.js'
 
-import {
-    NavbarPlugin
-} from 'bootstrap-vue'
-Vue.use(NavbarPlugin)
 Vue.use(require('vue-moment'));
 
 axios.interceptors.request.use(function (config) {
@@ -24,7 +20,7 @@ axios.interceptors.request.use(function (config) {
     return config;
 })
 Vue.prototype.$axios = axios
-Vue.use(BootstrapVue).use(IconsPlugin).use(VueToastr)
+Vue.use(BootstrapVue).use(IconsPlugin).use(NavbarPlugin).use(ModalPlugin).use(VueToastr)
 Vue.config.productionTip = false
 
 new Vue({

@@ -2,10 +2,7 @@
     <div class="container-fluid">
         <div id="wrapper">
             <div id="menu">
-                <p class="welcome">{{recipient}}<b></b></p>
-                <p class="logout" >
-                    <a id="exit" v-on:click="$router.go(-1)" href="#">Exit Chat</a>
-                </p>
+                <h1 class="welcome">{{recipient.username}}<b></b></h1>
             </div>
 
             <div id="chatbox">
@@ -26,7 +23,8 @@
     export default {
         props: {
             currentUser: String,
-            recipient: String
+            recipient: Object,
+            visible: Boolean
         },
         data() {
             return {
@@ -36,9 +34,13 @@
         },
         methods: {
             sendMessage() {
-                this.$store.state.signalr.connection.invoke("SendMessage", this.currentUserCredentials, this.recipients, document.getElementById('usermsg').value).catch(function (err) {
+                if (document.getElementById('usermsg').value.trim() == '') {
+                    return;
+                }
+                this.$store.state.signalr.connection.invoke("SendMessage", this.currentUserCredentials, this.recipients.username, document.getElementById('usermsg').value).catch(function (err) {
                     return console.error(err);
                 });
+                document.getElementById('usermsg').value = '';
             }
         }
     }
@@ -48,6 +50,10 @@
     * {
         margin: 0;
         padding: 0;
+    }
+
+    p.senderMsg {
+        float: right;
     }
 
     body {
@@ -150,7 +156,7 @@
         display: flex;
     }
 
-        #menu p.welcome {
+        #menu h1.welcome {
             flex: 1;
         }
 

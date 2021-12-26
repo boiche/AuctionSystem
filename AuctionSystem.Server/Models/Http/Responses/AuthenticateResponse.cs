@@ -10,14 +10,22 @@ namespace AuctionSystem.Server.Models.Http.Responses
         public string FullName { get; set; }
         public string Username { get; set; }
         public string Token { get; set; }
+        public int Role { get; set; }
+        public DateTime? BanDate { get; set; }
+        public string BanReason { get; set; }
 
-
+        public AuthenticateResponse(DateTime banDate, string banReason)
+        {
+            BanDate = banDate;
+            BanReason = banReason;
+        }
         public AuthenticateResponse(User user, string token)
         {
             Id = user.Id;
             FullName = user.FullName;
             Username = user.Username;
             Token = token;
+            Role = user.Role ?? 1;
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using AuctionSystem.Data.Model;
 using AuctionSystem.Server.Models.Http.Requests;
 using AuctionSystem.Server.Services.Interfaces;
+using AuctionSystem.Server.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace AuctionSystem.Server.Controllers
 {
@@ -13,6 +15,7 @@ namespace AuctionSystem.Server.Controllers
         {
             this.service = service;
             this.service.SetContext(context);
+            this.context = context;
         }
 
         [HttpPost]
@@ -31,17 +34,63 @@ namespace AuctionSystem.Server.Controllers
             try
             {
                 var response = this.service.Login(request);
+                if (response == null)
+                    return Unauthorized($"Invalid email or password");
                 if (response.Id != null && response.Id != Guid.Empty)
                 {
                     return Ok(response);
                 }
-                else return Unauthorized(response);
+                else if (response.BanDate.HasValue)
+                    return Unauthorized($"You're banned until: {response.BanDate} for reason: {response.BanReason}");
+
+                return Unauthorized($"Invalid email or password");
+
             }
             catch (NullReferenceException)
             {
                 //TODO: log exception
                 throw;
             }
+        }
+
+        [HttpGet]
+        [ActionName("GetUser")]
+        public JsonResult GetUser(string username)
+        {
+            try
+            {
+                User user = context.Users.FirstOrDefault(x => x.Username == username);
+                return Json(new { user });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetUsers")]
+        public JsonResult GetUsers()
+        {
+            try
+            {
+                var users = context.Users.Where(x => x.Role != (int)Roles.Admin).ToList();
+                return Json(new { users });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [ActionName("BanUser")]
+        public ActionResult BanUser([FromBody]BanRequest banRequest)
+        {
+            if (service.Ban(banRequest))
+                return Ok();
+            else
+                return BadRequest();
         }
     }
 }

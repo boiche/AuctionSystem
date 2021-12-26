@@ -7,6 +7,7 @@
                         <li class="nav-item"><router-link class="nav-link" to="/">Home</router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/about">About</router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/login">{{loggedIn ? 'Profile' : 'Login'}}</router-link></li>
+                        <li class="nav-item" v-if="admin"><router-link class="nav-link" to="/Admin">Admin</router-link></li>
                         <li class="nav-item" v-if="loggedIn"><LogoutButton></LogoutButton></li>
                     </ul>
                 </b-navbar>
@@ -23,28 +24,14 @@
 
 <script type="text/javascript">
     import LogoutButton from './components/Auth/LogoutButton.vue'
+
     export default {
-        methods: {
-            open() {
-                try {
-                    var user = localStorage.getItem("user");
-                } catch (e) {
-                    console.log('Please log in in order to use this functionality');
-                }
-                this.$store.state.signalr.connection.invoke("SendMessage", user, '{ "Username": "some idiot" }', 'some message').catch(function (err) {
-                    return console.error(err.toString());
-                });
-            }
-        },
-        data() {
-            return {
-                chatBoxes: JSON.parse(localStorage.getItem('chatBoxes')),
-                
-            }
-        },
         computed: {
             loggedIn() {
                 return this.$store.state.auth.status.loggedIn
+            },
+            admin() {
+                return this.$store.state.auth.user?.role == 3
             }
         },
         components: {

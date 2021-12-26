@@ -30,6 +30,26 @@ class AuthService {
         localStorage.removeItem('user');
         router.push('/Login')
     }
+
+    async getUser(username) {
+        var result;
+        await axios.get(API_URL + '/GetUser', { params: { username: username } }).then(function (response) {
+            result = response.data;
+        });
+        return result;
+    }
+
+    async getUsers() {
+        var result;
+        await axios.get(API_URL + '/GetUsers').then(function (response) {
+            result = response.data.users;
+        });
+        return result;
+    }
+
+    banUser(banRequest) {
+        axios.post(API_URL + '/BanUser', banRequest);
+    }
 }
 
 export default new AuthService()

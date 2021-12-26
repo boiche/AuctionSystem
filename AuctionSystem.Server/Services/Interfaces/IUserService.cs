@@ -16,5 +16,7 @@ namespace AuctionSystem.Server.Services.Interfaces
         public bool Register(RegisterRequest newUser);
 
         public AuthenticateResponse Login(AuthenticateRequest request);
+
+        public bool Ban(BanRequest banRequest);
     }
 }

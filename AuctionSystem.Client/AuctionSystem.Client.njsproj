@@ -36,7 +36,19 @@
     <Content Include="src\assets\styles\chatBox.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\Admin\AdminAuctions.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\Admin\AdminBids.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\Admin\AdminUsers.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\auctionLink.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\Admin\AdminIndex.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\Auth\LoginComponent.vue">
@@ -58,6 +70,7 @@
     <Content Include="src\components\Countdown.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\createAuction.vue" />
     <Content Include="src\components\HelloWorld.vue">
       <SubType>Code</SubType>
     </Content>
@@ -127,6 +140,7 @@
     <Folder Include="src\assets\pictures\" />
     <Folder Include="src\assets\styles\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\components\Admin\" />
     <Folder Include="src\components\Auth\" />
     <Folder Include="src\models\" />
     <Folder Include="src\store\" />

@@ -2,12 +2,15 @@
     <div>
         <div id="wrapper">
             <h1>{{auction.title}}</h1>
-            <h2>
-                <Countdown :date="expiringOn"></Countdown>
+            <h2 v-if="auction.stateId == 0">
+                <Countdown :date="expiringOn" @onFinish="finish"></Countdown>
+            </h2>
+            <h2 v-else>
+                This auction is no longer active
             </h2>
             <img id="auctionPic" src="@/assets/pictures/auction.jpg" />
             <p style="font-size:20px">{{auction.description}}</p>
-            <div class="formInput">
+            <div class="formInput" v-if="auction.stateId == 0">
                 <input v-model="amount" step="0.01" min="0" type="number" id="usermsg" />
                 <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid" v-on:click="placeBid">Bid</div>
             </div>
@@ -39,7 +42,7 @@
         },
         async created() {
             var result = await AuctionService.getById(this.$route.params.id);
-            this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount);
+            this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount, null, result.auction.stateId);
             this.expiringOn = moment(this.auction.publishedOn).add(7, 'days').format('MM.D.YYYY')
             this.refreshBids = async function refreshBids() {
                 this.bids = await AuctionService.getBids(result.auction.id);
@@ -47,15 +50,10 @@
             await this.refreshBids();
             this.bids.map(x => {
                 x.createdOn = moment(x.createdOn).format('do.MMM.YY HH:mm');
-            });            
-            //setInterval(this.refreshBids, 5000);
+            });
         },
-        //beforeUnmount() {
-        //    clearInterval(this.refreshBids);
-        //},
         methods: {
             async placeBid() {
-                console.log(this.auction.leadingBid);
                 if (this.amount <= this.auction.leadingBid) {
                     this.$toastr.w('Your bid is too small');
                     return;
@@ -64,8 +62,10 @@
                 //TODO: show error message when bid was not created (amount was smaller than highest bid)
                 this.$toastr.s('Bid placed successfully');
                 var result = await AuctionService.getById(this.$route.params.id);
-                this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount);
-                console.log(this.auction.leadingBid);
+                this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount, result.auction.stateId);
+            },
+            finish() {
+                AuctionService.finishAuction(this.auction.id)
             }
         }
     }

@@ -49,6 +49,10 @@
         computed: {
             loggedIn() {
                 return this.$store.state.auth.status.loggedIn
+            },
+            admin() {
+                console.log('admin')
+                return this.$store.state.auth.status.admin
             }
         },
         created() {

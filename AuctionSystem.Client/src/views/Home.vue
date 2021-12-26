@@ -22,8 +22,6 @@
         },
         async created() {
             this.auctions = await auctionService.getRecentAuctions();
-            console.log('test');
-            console.log(this.auctions);
         }
     }
 </script>

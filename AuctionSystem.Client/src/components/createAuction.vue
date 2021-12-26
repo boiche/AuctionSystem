@@ -1,22 +1,40 @@
 <template>
     <div class="container-fluid">
         <div id="wrapper">
-            <div class="formInput">
+            <form class="formInput">
                 <h3>Create Auction</h3>
                 <label for="title">Title</label>
-                <input name="title" type="text" id="title" />
+                <input v-model="title" name="title" type="text" id="title" />
                 <label for="description">Description</label>
-                <textarea id="description" name="description"></textarea>
-                <label for="picture">Picture</label>
-                <input name="picture" type="file" accept="image/" id="picture" />
-                <div class="btn btn-submit" name="submit" type="submit" id="submit">Create</div>
-            </div>
+                <input v-model="description" id="description" type="text" name="description" />
+                <label for="endDate">End date</label>
+                <input v-model="endDate" id="description" type="datetime-local" name="description" />
+                <!--<label for="picture">Picture</label>
+                <input name="picture" type="file" accept="image/" id="picture" />-->
+                <div class="btn btn-submit" name="submit" type="submit" id="submit" v-on:click="submit()">Create</div>
+            </form>
         </div>
     </div>
 </template>
 
 <script>
+    import AuctionService from '@/services/auctionService.js'
 
+    export default {
+        data() {
+            return {
+                title: '',
+                description: '',
+                file: '',
+                endDate: ''
+            }
+        },
+        methods: {
+            async submit () {
+                await AuctionService.createAuction(this.title, this.description, Date.now, this.endDate);
+            }
+        }
+    }
 </script>
 
 <style scoped>
@@ -38,7 +56,7 @@
         border: 2px solid #212121;
         border-radius: 4px;
     }
-    #title, #picture, textarea {
+    #title, #picture, #description {
         display: block;
         margin: 10px;
         width: 80%;

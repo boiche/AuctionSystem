@@ -38,7 +38,7 @@ namespace AuctionSystem.Server.Chat
                 User user1 = JsonConvert.DeserializeObject<User>(user);
                 Console.WriteLine("Message received");
                 string groupName = GetGroupName(user1.Username, recipient);
-                await Clients.Group(groupName).SendAsync("ReceiveMessage", user1.Username, recipient, message);
+                await Clients.Group(groupName).SendAsync("ReceiveMessage", user1.Username, recipient, message, DateTime.Now);
             }
             catch (Exception)
             {

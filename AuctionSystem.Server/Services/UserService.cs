@@ -34,7 +34,10 @@ namespace AuctionSystem.Server.Services
         {
             var user = context.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
-            if (user == null) return null;
+            if (user == null)
+                return null;
+            else if (user.BanDate >= DateTime.Now)
+                return new AuthenticateResponse(user.BanDate.Value, user.BanReason);
             var token = GenerateJwtToken(user);
 
             return new AuthenticateResponse(user, token);
@@ -94,6 +97,18 @@ namespace AuctionSystem.Server.Services
         public AuthenticateResponse Login(AuthenticateRequest request)
         {
             return Authenticate(request);
+        }
+
+        public bool Ban(BanRequest banRequest)
+        {
+            User currentUser = context.Users.SingleOrDefault(x => x.Id == banRequest.UserId);
+            if (currentUser == null)
+            {
+                return false;
+            }
+            currentUser.BanDate = banRequest.BanDate;
+            currentUser.BanReason = banRequest.BanReason;
+            return context.SaveChanges() > 0;
         }
     }
 }

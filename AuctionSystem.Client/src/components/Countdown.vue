@@ -31,7 +31,6 @@
             }
         },
         mounted() {
-            console.log('countdown ' + this.date)
             const _self = this
             window.setInterval(() => {
                 this.now = Math.trunc((new Date()).getTime() / 1000)
