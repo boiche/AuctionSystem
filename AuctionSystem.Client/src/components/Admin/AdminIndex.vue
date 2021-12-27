@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid accordion" role="tablist">
+    <div class="container-fluid accordion" role="tablist" v-if="loggedIn && isAdmin">
         <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
                 <b-button block v-b-toggle.collapse-users accordion="adminSections" role="tablist" class="m-1 w-100">Users</b-button>
@@ -30,6 +30,19 @@
         components: {
             AdminUsers,
             AdminAuctions
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn
+            },
+            isAdmin() {
+                return this.$store.state.auth.status.admin
+            }
+        },
+        mounted() {
+            if (!this.loggedIn||!this.isAdmin) {
+                this.$router.push('/')
+            }
         }
     }
 </script>
