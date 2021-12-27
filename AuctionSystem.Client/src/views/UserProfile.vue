@@ -6,7 +6,7 @@
             <h3>{{userPage.phone}}</h3>
         </div>
         <!--IF THIS IS ANOTHER USER'S PROFILE-->
-        <div id="showChat" v-if="isSameUser != true">
+        <div id="showChat" v-if="loggedIn && !isSameUser">
             <button id="messageBtn" class="bt" v-on:click="beginChat">Message {{userPage.username}}</button>
             <ChatBox :current-user="currentUser"
                      :recipient="userPage"
@@ -61,6 +61,11 @@
             var result = await UserService.getUser(this.$route.params.username);
             this.userPage = new User(result.user.username, result.user.fullName, result.user.email, result.user.phone);
             this.isSameUser = this.userPage.username === this.$store.state.auth.user.username;
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn
+            }
         }
     }
 </script>

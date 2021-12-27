@@ -9,7 +9,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './services/chatService.js'
 
-Vue.use(require('vue-moment'));
+import moment from 'moment'
+Vue.prototype.moment = moment
 
 axios.interceptors.request.use(function (config) {
     var userCredentials = localStorage.getItem('user');

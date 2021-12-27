@@ -32,6 +32,7 @@
         methods: {
             async submit () {
                 await AuctionService.createAuction(this.title, this.description, Date.now, this.endDate);
+                this.$router.push('/')
             }
         }
     }

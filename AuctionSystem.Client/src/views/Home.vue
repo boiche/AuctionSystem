@@ -1,10 +1,17 @@
 <template>
     <div class="home">
         <h1>Active auctions</h1>
-        <div class="wrapper" v-for="auction in auctions.auctions" v-bind:key="auction.id">
-            <AuctionLink :id="auction.id" :title="auction.title"></AuctionLink>
-        </div>
-        
+        <span v-for="auction in auctions.auctions" v-bind:key="auction.id">
+            <div class="wrapper" v-if="auction.stateId == 0">
+                <AuctionLink :id="auction.id" :title="auction.title"></AuctionLink>
+            </div>
+        </span>
+        <h1>Expired auctions</h1>
+        <span v-for="auction in auctions.auctions" v-bind:key="auction.id">
+            <div class="wrapper" v-if="auction.stateId != 0">
+                <AuctionLink :id="auction.id" :title="auction.title"></AuctionLink>
+            </div>
+        </span>
     </div>
 </template>
 

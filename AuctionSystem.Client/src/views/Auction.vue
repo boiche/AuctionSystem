@@ -10,7 +10,7 @@
             </h2>
             <img id="auctionPic" src="@/assets/pictures/auction.jpg" />
             <p style="font-size:20px">{{auction.description}}</p>
-            <div class="formInput" v-if="auction.stateId == 0">
+            <div class="formInput" v-if="auction.stateId == 0 && loggedIn">
                 <input v-model="amount" step="0.01" min="0" type="number" id="usermsg" />
                 <div class="btn btn-submit" id="submitmsg" type="submit" value="Bid" v-on:click="placeBid">Bid</div>
             </div>
@@ -49,7 +49,8 @@
             };
             await this.refreshBids();
             this.bids.map(x => {
-                x.createdOn = moment(x.createdOn).format('do.MMM.YY HH:mm');
+               // x.createdOn = moment(x.createdOn).format('do.MMM.YY HH:mm');
+                console.log(x.createdOn)
             });
         },
         methods: {
@@ -63,9 +64,15 @@
                 this.$toastr.s('Bid placed successfully');
                 var result = await AuctionService.getById(this.$route.params.id);
                 this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount, result.auction.stateId);
+                this.$router.go()
             },
             finish() {
                 AuctionService.finishAuction(this.auction.id)
+            }
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn
             }
         }
     }
