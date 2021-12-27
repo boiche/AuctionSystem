@@ -6,7 +6,6 @@ import Login from '../views/Auth/Login.vue'
 import Register from '../views/Auth/Register.vue'
 import UserProfile from '../views/UserProfile.vue'
 import Auction from '../views/Auction.vue'
-import Admin from '@/components/Admin/AdminIndex.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +19,7 @@ const routes = [
         path: '/Direct',
         name: 'Direct',
         component: Direct,
+        requiresAuth: true
     },
     {
         path: '/About',
@@ -42,17 +42,44 @@ const routes = [
     {
         path: '/userProfile/:username',
         name: 'userProfile',
-        component: UserProfile
+        component: UserProfile,
+        requiresAuth: true
     },
     {
         path: '/Auction/:id',
         name: 'Action',
-        component: Auction
+        component: Auction,
+        requiresAuth: true
+    },
+    {
+        path: '/Forbidden',
+        name: 'forbidden',
+        component: () => import('@/views/DeniedAccess.vue')
     },
     {
         path: '/Admin',
         name: 'Admin',
-        component: Admin
+        component: () => import('@/components/Admin/AdminIndex.vue'),
+        requiresAuth: true,
+        beforeEnter: (to, from, next) => {
+            var user = window.localStorage.getItem('user');
+            console.log(user);
+            if (!user) {
+                next({
+                    name: 'Login'
+                });
+            }
+            else {
+                if (JSON.parse(user).role != 3) {
+                    next({
+                        name: 'forbidden'
+                    });
+                }
+                else {
+                    next();
+                }
+            }
+        }
     }
 ]
 
@@ -66,7 +93,7 @@ router.beforeEach((from, to, next) => {
     if (from.meta.requiresAuth) {
         if (!window.localStorage.getItem('user')) {
             next({
-                name: 'login'
+                name: 'Login'
             })
         } else {
             next()

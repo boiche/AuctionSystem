@@ -13,8 +13,9 @@ class AuthService {
 
     loginUser(data) {
         const dataForm = {
-            username: data.username,
-            password: sha256(data.password)
+            username: data.user.username,
+            password: sha256(data.user.password),
+            checked: data.validateRecaptcha
         }
         return axios.post(API_URL + '/Login', dataForm).then(function (response) {
             if (response.data.token) {
@@ -47,8 +48,14 @@ class AuthService {
         return result;
     }
 
-    banUser(banRequest) {
-        axios.post(API_URL + '/BanUser', banRequest);
+    async banUser(banRequest) {
+        await axios.post(API_URL + '/BanUser', banRequest);
+    }
+
+    async unbanUser(banRequest) {
+        var form = new FormData();
+        form.append('userId', banRequest.userId);
+        await axios.post(API_URL + '/UnbanUser', form);
     }
 }
 

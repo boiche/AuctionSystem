@@ -11,7 +11,7 @@ namespace AuctionSystem.Server.Services
     public class RecaptchaService
     {
         private static readonly HttpClient client = new HttpClient();
-        public static async Task<string> RetrieveResponse(RecaptchaRequest recaptchaRequest, IConfiguration configuration)
+        public static async Task<HttpResponseMessage> RetrieveResponse(RecaptchaRequest recaptchaRequest, IConfiguration configuration)
         {
             var values = new Dictionary<string, string>
                 {
@@ -23,8 +23,14 @@ namespace AuctionSystem.Server.Services
 
             var response = await client.PostAsync(configuration.GetValue(typeof(string), "RECAPTCHA_GOOGLE_URL").ToString(), content);
 
-            return await response.Content.ReadAsStringAsync();
-
+            return new HttpResponseMessage()
+            {
+                StatusCode = response.StatusCode,
+                Content = response.Content,
+                ReasonPhrase = response.ReasonPhrase,
+                RequestMessage = response.RequestMessage,
+                Version = response.Version
+            };
         }
     }
 }

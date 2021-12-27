@@ -26,13 +26,14 @@
             </form>
         </div>
         <p>Don't have an account yet? <router-link to="/register">Sign up</router-link></p>
-       
+
     </div>
 </template>
 
 <script>
     import User from '../../models/user.js'
     import ReCaptcha from '@/components/Auth/ReCaptcha.vue'
+
     export default {
         name: 'Login',
         components: {
@@ -67,7 +68,7 @@
             handleLogin() {
                 this.loading = true
                 if (this.user.username && this.user.password) {
-                    this.$store.dispatch('auth/login', this.user).then(
+                    this.$store.dispatch('auth/login', { user: this.user, validateRecaptcha: this.validateRecaptcha }).then(
                         () => {
                             console.log('user logged in successfully. check local storage vor key user');
                             this.$router.push('/')
@@ -82,6 +83,10 @@
                                 error.toString()
                         }
                     )
+                }
+                else {
+                    this.loading = false;
+                    console.log(this.user.username + ' ' + this.user.password + ' ' + this.validateRecaptcha);
                 }
             }
         }
@@ -115,11 +120,12 @@
 
     .profile-img-card {
         width: 40%;
-        margin:10px;
+        margin: 10px;
         margin-left: 30%;
         border-radius: 50%;
     }
-    button{
+
+    button {
         margin-top: 20px;
     }
 </style>

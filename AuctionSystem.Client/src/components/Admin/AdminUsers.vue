@@ -11,7 +11,6 @@
         <b-modal :id="infoModal.id" :title="infoModal.title" hide-footer no-close-on-backdrop>
             <b-form @submit="submit" class="m-1">
                 <b-form-group v-if="infoModal.reason">
-                    <b-form-input v-model="form.userId" hidden></b-form-input>
                     <b-form-input v-model="form.banDate" :min="today" type="date" class="m-1" required></b-form-input>
                     <b-form-input v-model="form.banReason" typeof="text" class="m-1" required placeholder="Reason"></b-form-input>
                 </b-form-group>
@@ -46,7 +45,7 @@
                 infoModal: {
                     id: 'info-modal',
                     title: '',
-                    reason: false
+                    reason: false //true: BAN   false: UNBAN
                 },
                 form: {
                     userId: '',
@@ -75,13 +74,19 @@
                 else {
                     this.infoModal.title = `You are about to unban user ${item.username}`
                     this.infoModal.reason = false
+                    this.form.userId = item.id
                 }
             },
             closeModal() {
                 this.$bvModal.hide(this.infoModal.id)
             },
-            submit() {
-                AuthService.banUser(this.form)
+            async submit() {
+                if (this.infoModal.reason) {
+                    await AuthService.banUser(this.form)
+                }
+                else {
+                    await AuthService.unbanUser(this.form)
+                }
             }
         }
     }

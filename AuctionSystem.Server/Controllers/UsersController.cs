@@ -33,6 +33,10 @@ namespace AuctionSystem.Server.Controllers
         {
             try
             {
+                if (!request.Checked)
+                {
+                    return Unauthorized("Please check I'm not a robot");
+                }
                 var response = this.service.Login(request);
                 if (response == null)
                     return Unauthorized($"Invalid email or password");
@@ -91,6 +95,22 @@ namespace AuctionSystem.Server.Controllers
                 return Ok();
             else
                 return BadRequest();
+        }
+
+        [HttpPost]
+        [ActionName("UnbanUser")]
+        public ActionResult UnbanUser([FromForm]Guid userId)
+        {
+            User user = context.Users.FirstOrDefault(x => x.Id == userId);
+            if (user == null)
+                return BadRequest();
+
+            user.BanDate = null;
+            user.BanReason = null;
+            if (context.SaveChanges() > 0)
+                return Ok();
+            else
+                return new EmptyResult();
         }
     }
 }

@@ -120,6 +120,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\views\Auth\Login.vue" />
+    <Content Include="src\views\DeniedAccess.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\views\Direct.vue">
       <SubType>Code</SubType>
     </Content>

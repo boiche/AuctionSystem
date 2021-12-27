@@ -1,5 +1,5 @@
 <template>
-    <VueRecaptcha :sitekey="'6LeRPpYdAAAAAFRfHG2qMUBieUCfypk9LExYJLGc'" :loadRecaptchaScript="true" @verify="validate" />
+    <vue-recaptcha :sitekey="'6LeRPpYdAAAAAFRfHG2qMUBieUCfypk9LExYJLGc'" :loadRecaptchaScript="true" @verify="validate"></vue-recaptcha>
 </template>
 
 <script>
@@ -13,9 +13,9 @@
             }
         },
         methods: {
-            validate(response) {
-                Validation.validate({ Response: response }).then(result => {
-                    this.$emit('validate', result.objectResult.success)
+            async validate(response) {
+                await Validation.validate({ Response: response }).then(result => {
+                    this.$emit('validate', result.isSuccessStatusCode)
                 }).catch(error => console.log(error))
             }
         }

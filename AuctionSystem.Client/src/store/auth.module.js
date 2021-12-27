@@ -18,8 +18,8 @@ export const auth = {
     namespaced: true,
     state: initialState,
     actions: {
-        login({ commit }, user) {
-            return AuthService.loginUser(user).then(user => {
+        login({ commit }, data) {
+            return AuthService.loginUser(data).then(user => {
                 commit('loginSuccess', user)
                 return Promise.resolve(user)
             },
