@@ -18,5 +18,7 @@ namespace AuctionSystem.Server.Services.Interfaces
         public AuthenticateResponse Login(AuthenticateRequest request);
 
         public bool Ban(BanRequest banRequest);
+
+        public bool Unban(Guid userId);
     }
 }

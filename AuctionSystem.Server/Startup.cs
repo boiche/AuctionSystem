@@ -5,18 +5,11 @@ using AuctionSystem.Server.Services.Interfaces;
 using AuctionSystem.Server.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AuctionSystem.Server
 {
@@ -30,6 +23,13 @@ namespace AuctionSystem.Server
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
             services.AddSignalR(options =>
             {
@@ -46,11 +46,13 @@ namespace AuctionSystem.Server
                         .AllowCredentials();
                 });
             });
+
             services.AddControllers();
             services.AddDbContext<AuctionSystemContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AuctionSystemConnectionString")));
             services.AddScoped<IUserService, UserService>();
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -61,17 +63,17 @@ namespace AuctionSystem.Server
                 app.UseDefaultFiles(); // Enables default file mapping on the web root.
                 app.UseStaticFiles(); // Marks files on the web root as servable.               
             }
-
+            
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
             app.UseMiddleware<JWTMiddleware>();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");
                 endpoints.MapHub<ChatHub>("/chat");
-            });            
+            });
+            
         }
     }
 }

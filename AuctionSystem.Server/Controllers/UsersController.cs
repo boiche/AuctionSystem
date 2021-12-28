@@ -3,6 +3,7 @@ using AuctionSystem.Server.Models.Http.Requests;
 using AuctionSystem.Server.Services.Interfaces;
 using AuctionSystem.Server.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Linq;
 
@@ -11,6 +12,8 @@ namespace AuctionSystem.Server.Controllers
     public class UsersController : BaseController
     {
         private readonly IUserService service;
+        private readonly string lockoutKey = "lockout";
+       
         public UsersController(AuctionSystemContext context, IUserService service)
         {
             this.service = service;
@@ -38,10 +41,14 @@ namespace AuctionSystem.Server.Controllers
                     return Unauthorized("Please check I'm not a robot");
                 }
                 var response = this.service.Login(request);
-                if (response == null)
+                
+                if (response.WronCredentials)
+                {
                     return Unauthorized($"Invalid email or password");
+                }
                 if (response.Id != null && response.Id != Guid.Empty)
                 {
+                    TempData.Remove($"{lockoutKey}{request.Username}");
                     return Ok(response);
                 }
                 else if (response.BanDate.HasValue)
@@ -101,16 +108,10 @@ namespace AuctionSystem.Server.Controllers
         [ActionName("UnbanUser")]
         public ActionResult UnbanUser([FromForm]Guid userId)
         {
-            User user = context.Users.FirstOrDefault(x => x.Id == userId);
-            if (user == null)
-                return BadRequest();
-
-            user.BanDate = null;
-            user.BanReason = null;
-            if (context.SaveChanges() > 0)
+            if (service.Unban(userId))
                 return Ok();
             else
-                return new EmptyResult();
+                return BadRequest();
         }
     }
 }

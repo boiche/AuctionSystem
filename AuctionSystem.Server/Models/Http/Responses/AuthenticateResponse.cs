@@ -6,13 +6,14 @@ namespace AuctionSystem.Server.Models.Http.Responses
 {
     public class AuthenticateResponse : ActionResult
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string FullName { get; set; }
         public string Username { get; set; }
         public string Token { get; set; }
         public int Role { get; set; }
         public DateTime? BanDate { get; set; }
         public string BanReason { get; set; }
+        public bool WronCredentials { get; set; }
 
         public AuthenticateResponse(DateTime banDate, string banReason)
         {
@@ -26,6 +27,11 @@ namespace AuctionSystem.Server.Models.Http.Responses
             Username = user.Username;
             Token = token;
             Role = user.Role ?? 1;
+        }
+        public AuthenticateResponse(Guid userId, bool wrongCredentials)
+        {
+            this.WronCredentials = wrongCredentials;
+            this.Id = userId;
         }
     }
 }

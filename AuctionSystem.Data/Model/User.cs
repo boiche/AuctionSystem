@@ -27,6 +27,7 @@ namespace AuctionSystem.Data.Model
         public int? Role { get; set; }
         public DateTime? BanDate { get; set; }
         public string BanReason { get; set; }
+        public int LockoutAttempts { get; set; }
 
         public virtual Role RoleNavigation { get; set; }
         public virtual ICollection<Auction> Auctions { get; set; }

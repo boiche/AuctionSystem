@@ -1,5 +1,4 @@
 ﻿using AuctionSystem.Data.Model;
-using AuctionSystem.Server.Models;
 using AuctionSystem.Server.Models.Http.Requests;
 using AuctionSystem.Server.Models.Http.Responses;
 using AuctionSystem.Server.Services.Interfaces;
@@ -11,13 +10,14 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace AuctionSystem.Server.Services
 {
     public class UserService : BaseService, IUserService
     {
+        private readonly string lockoutReasonMessage = "Locked out: too many invalid login attempts";
+
         public void SetContext(AuctionSystemContext context)
         {
             this.context = context;
@@ -32,14 +32,46 @@ namespace AuctionSystem.Server.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = context.Users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            var user = context.Users.SingleOrDefault(x => x.Username == model.Username);
 
             if (user == null)
-                return null;
-            else if (user.BanDate >= DateTime.Now)
-                return new AuthenticateResponse(user.BanDate.Value, user.BanReason);
+                return new AuthenticateResponse(default, true);
+            else if (user.Password != model.Password)
+            {
+                user.LockoutAttempts++;
+                if (user.LockoutAttempts >= 5)
+                {                    
+                    BanRequest banRequest = new BanRequest()
+                    {
+                        UserId = user.Id,
+                        BanDate = DateTime.Now.AddDays(7),
+                        BanReason = lockoutReasonMessage
+                    };
+                    Ban(banRequest);
+                    return new AuthenticateResponse(banRequest.BanDate, banRequest.BanReason);
+                }
+                else
+                {
+                    context.SaveChanges();
+                    return new AuthenticateResponse(user.Id, true);
+                }
+            }
+            if (user.BanDate.HasValue)
+            {
+                if (user.BanDate < DateTime.Now)
+                    Unban(user.Id);
+
+                else if (user.BanDate >= DateTime.Now)
+                    return new AuthenticateResponse(user.BanDate.Value, user.BanReason);
+            }
+
             var token = GenerateJwtToken(user);
 
+            if (user.LockoutAttempts > 0)
+            {
+                user.LockoutAttempts = 0;
+                context.SaveChanges();
+            }
             return new AuthenticateResponse(user, token);
         }
 
@@ -109,6 +141,21 @@ namespace AuctionSystem.Server.Services
             currentUser.BanDate = banRequest.BanDate;
             currentUser.BanReason = banRequest.BanReason;
             return context.SaveChanges() > 0;
+        }
+
+        public bool Unban(Guid userId)
+        {
+            User user = context.Users.FirstOrDefault(x => x.Id == userId);
+            if (user == null)
+                return false;
+
+            user.LockoutAttempts = 0;
+            user.BanDate = null;
+            user.BanReason = null;
+            if (context.SaveChanges() > 0)
+                return true;
+            else
+                return false;
         }
     }
 }
