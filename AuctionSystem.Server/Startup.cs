@@ -27,7 +27,7 @@ namespace AuctionSystem.Server
             services.AddSignalR(options =>
             {
                 options.EnableDetailedErrors = true;
-            });           
+            });
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -45,17 +45,18 @@ namespace AuctionSystem.Server
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AuctionSystemConnectionString")));
             services.AddScoped<IUserService, UserService>();
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {                
+            {
                 app.UseDeveloperExceptionPage();
                 app.UseDefaultFiles(); // Enables default file mapping on the web root.
                 app.UseStaticFiles(); // Marks files on the web root as servable.               
             }
-            
+
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
@@ -65,7 +66,7 @@ namespace AuctionSystem.Server
                 endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");
                 endpoints.MapHub<ChatHub>("/chat");
             });
-            
+
         }
     }
 }

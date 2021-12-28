@@ -1,11 +1,11 @@
 <template>
     <div class="home">
         <h1>Active auctions</h1>
-        <div v-for="auction in auctions.auctions" v-bind:key="auction.id">
+        <span v-for="auction in auctions.auctions" v-bind:key="auction.id">
             <div class="wrapper" v-if="auction.stateId == 0">
                 <AuctionLink :id="auction.id" :title="auction.title"></AuctionLink>
             </div>
-        </div>        
+        </span>        
     </div>
 </template>
 
