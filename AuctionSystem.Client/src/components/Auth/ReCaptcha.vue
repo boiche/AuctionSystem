@@ -4,7 +4,7 @@
 
 <script>
     import { VueRecaptcha } from 'vue-recaptcha'
-    import Validation from '@/services/chatService.js'
+    import Validation from '@/services/authService.js'
     export default {
         components: { VueRecaptcha },
         data() {

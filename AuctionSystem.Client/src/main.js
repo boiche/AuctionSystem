@@ -7,7 +7,6 @@ import VueToastr from "vue-toastr";
 import { BootstrapVue, IconsPlugin, ModalPlugin, NavbarPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './services/chatService.js'
 
 import moment from 'moment'
 Vue.prototype.moment = moment

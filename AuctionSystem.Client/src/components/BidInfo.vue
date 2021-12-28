@@ -1,11 +1,24 @@
 <template>
     <div>
-        <div id="bid"><span id="user">{{user}}: </span> <span id="amount">{{amount}}$</span> on <span id="time">{{datetime}}</span></div>
+        <div id="bid">
+            <span id="user">
+                <router-link class="nav-link userLink" :to="link">
+                    {{user}}:
+                </router-link>
+            </span> 
+            <span id="amount">{{amount}}$</span> on 
+            <span id="time">{{datetime}}</span>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
+        data() {
+            return {
+                link: '/userProfile/' + this.user
+            }
+        },
         props: {
             user: String,
             amount: Number,
@@ -14,6 +27,7 @@
     }
 </script>
 <style>
+
     #bid{
         font-size: 20px;
     }
@@ -22,5 +36,8 @@
     }
     #time {
         font-style: italic;
+    }
+    .userLink {
+        display: inline !important;
     }
 </style>

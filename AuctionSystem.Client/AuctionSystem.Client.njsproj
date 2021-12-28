@@ -95,9 +95,6 @@
     <Content Include="src\services\authService.js">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="src\services\chatService.js">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="src\store\auth.module.js">
       <SubType>Code</SubType>
     </Content>

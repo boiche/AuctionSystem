@@ -23,13 +23,6 @@ namespace AuctionSystem.Server
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
             services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
             services.AddSignalR(options =>
             {
@@ -52,7 +45,6 @@ namespace AuctionSystem.Server
                 options.UseSqlServer(
                     Configuration.GetConnectionString("AuctionSystemConnectionString")));
             services.AddScoped<IUserService, UserService>();
-            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

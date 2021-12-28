@@ -11,7 +11,7 @@
                     <label>Password</label>
                     <input v-model="user.password" type="password" class="form-control" name="password" required />
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="recaptcha">
                     <ReCaptcha @validate="validate"></ReCaptcha>
                 </div>
                 <div class="form-group">
@@ -94,6 +94,12 @@
 </script>
 
 <style scoped>
+    #recaptcha {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
     label {
         display: block;
         margin-top: 10px;

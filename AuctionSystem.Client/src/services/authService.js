@@ -4,6 +4,22 @@ import sha256 from 'js-sha256'
 const API_URL = 'https://localhost:44305/Users'
 
 class AuthService {
+    validate(request) {
+        return new Promise((resolve, reject) => {
+            axios.post(`https://localhost:44305/Recaptcha/validate`, request)
+                .then(response => {
+                    if (response.data.hasErrors) {
+                        reject(response.data.message)
+                    } else {
+                        resolve(response.data)
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        })
+    }
+
     registerUser(data) {
         data.password = sha256(data.password)
         return axios.post(API_URL + '/Register', data).then(function () {
