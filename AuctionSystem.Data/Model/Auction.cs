@@ -19,6 +19,8 @@ namespace AuctionSystem.Data.Model
         public DateTime PublishedOn { get; set; }
         public string Description { get; set; }
         public int? StateId { get; set; }
+        public decimal MinBid { get; set; }
+
 
         public virtual AuctionState State { get; set; }
         public virtual User User { get; set; }

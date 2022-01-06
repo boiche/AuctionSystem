@@ -48,12 +48,13 @@ class AuctionService {
         await axios.post(API_URL + '/Bid', form);
     }
 
-    async createAuction(title, description, publishedOn, endDate) {
+    async createAuction(title, description, publishedOn, endDate, minBid) {
         var form = new FormData();
         form.append('title', title);
         form.append('description', description);
         form.append('publishedOn', new Date().toISOString());
         form.append('endDate', endDate);
+        form.append('minBid', minBid);
         await axios.post(API_URL + '/CreateAuction', form);
     }
 

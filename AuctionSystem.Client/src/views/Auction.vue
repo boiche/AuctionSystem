@@ -42,7 +42,7 @@
         },
         async created() {
             var result = await AuctionService.getById(this.$route.params.id);
-            this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount, null, result.auction.stateId);
+            this.auction = new Auction(result.auction.id, result.auction.title, result.auction.description, result.auction.publishedOn, result.auction.leadingBid.amount, null, result.auction.stateId, result.auction.minBid);
             this.expiringOn = moment(this.auction.publishedOn).add(7, 'days').format('MM.D.YYYY')
             this.refreshBids = async function refreshBids() {
                 this.bids = await AuctionService.getBids(result.auction.id);
@@ -55,7 +55,7 @@
         },
         methods: {
             async placeBid() {
-                if (this.amount <= this.auction.leadingBid) {
+                if (this.amount <= this.auction.leadingBid || this.amount < this.auction.minBid) {
                     this.$toastr.w('Your bid is too small');
                     return;
                 }

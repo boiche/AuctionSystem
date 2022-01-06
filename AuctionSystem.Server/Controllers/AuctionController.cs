@@ -81,7 +81,8 @@ namespace AuctionSystem.Server.Controllers
                 AuctionId = auctionId,
                 CreatedOn = DateTime.Now,
                 Id = Guid.NewGuid(),
-                UserId = (HttpContext.Items["User"] as User).Id             
+                //UserId = (HttpContext.Items["User"] as User).Id;
+                UserId = Guid.Parse("8ad0eec8-33cf-4360-b6c0-db8c6dc53ffe")
             };
             context.Bids.Add(bid);
             if (context.SaveChanges() > 0)
@@ -114,7 +115,8 @@ namespace AuctionSystem.Server.Controllers
         {
             auction.Id = Guid.NewGuid();
             auction.StateId = (int)AuctionStates.Active;
-            auction.UserId = (HttpContext.Items["User"] as User).Id;
+            //auction.UserId = (HttpContext.Items["User"] as User).Id;
+            auction.UserId = Guid.Parse("8ad0eec8-33cf-4360-b6c0-db8c6dc53ffe");
 
             context.Auctions.Add(auction);
 

@@ -1,5 +1,5 @@
 export default class Auction {
-    constructor(id, title, description, publishedOn, leadingBid, endDate, stateId) {
+    constructor(id, title, description, publishedOn, leadingBid, endDate, stateId, minBid) {
         this.id = id
         this.title = title
         this.description = description
@@ -7,5 +7,6 @@ export default class Auction {
         this.leadingBid = leadingBid
         this.endDate = endDate
         this.stateId = stateId
+        this.minBid = minBid
     }
 }

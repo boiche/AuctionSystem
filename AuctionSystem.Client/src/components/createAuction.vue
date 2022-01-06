@@ -9,8 +9,10 @@
                 <input v-model="description" id="description" type="text" name="description" />
                 <label for="endDate">End date</label>
                 <input v-model="endDate" id="description" type="datetime-local" name="description" />
+                <label for="minBid">Minimum bid</label>
+                <input v-model="minBid" id="description" step="0.01" min="0" type="number" name="description" />
                 <!--<label for="picture">Picture</label>
-                <input name="picture" type="file" accept="image/" id="picture" />-->
+    <input name="picture" type="file" accept="image/" id="picture" />-->
                 <div class="btn btn-submit" name="submit" type="submit" id="submit" v-on:click="submit()">Create</div>
             </form>
         </div>
@@ -26,12 +28,13 @@
                 title: '',
                 description: '',
                 file: '',
-                endDate: ''
+                endDate: '',
+                minBid: ''
             }
         },
         methods: {
             async submit () {
-                await AuctionService.createAuction(this.title, this.description, Date.now, this.endDate);
+                await AuctionService.createAuction(this.title, this.description, Date.now, this.endDate, this.minBid);
                 this.$router.push('/')
             }
         }
