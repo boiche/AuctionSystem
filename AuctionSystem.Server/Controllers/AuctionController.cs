@@ -6,6 +6,8 @@ using System;
 using System.Data.Entity;
 using AuctionSystem.Server.Utils;
 using System.Collections.Generic;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace AuctionSystem.Server.Controllers
 {
@@ -144,8 +146,36 @@ namespace AuctionSystem.Server.Controllers
         public IActionResult Finish ([FromForm]Guid auctionId)
         {
             var auction = context.Auctions.FirstOrDefault(x => x.Id == auctionId);
+
+            //auctionId идва като null от фронтенда. Тази проверка го заобикаля, но не работи, ако има повече от един изтекъл търг.
+            if (auction == null)
+                auction = context.Auctions.Where(x => DateTime.Now > x.PublishedOn.AddDays(7) && x.StateId == 0).FirstOrDefault();
+
             if (auction == null)
                 return BadRequest();
+
+            auction.LeadingBid = context.Bids
+                                            .Where(x => x.AuctionId == auction.Id)
+                                            .OrderByDescending(x => x.Amount)
+                                            .FirstOrDefault();
+            var winner = context.Users.Where(x => x.Id == auction.LeadingBid.UserId).FirstOrDefault();
+
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Auction System", "auction.system22@gmail.com"));
+            message.To.Add(new MailboxAddress(winner.FullName, winner.Email));
+            message.Subject = "Auction won";
+            message.Body = new TextPart("plain")
+            {
+                Text = "Congratulations, \n You won the " + auction.Title + " auction with your leading bid (" + auction.LeadingBid.Amount.ToString() + "$)!"
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("auction.system22@gmail.com", "AUC123-auc");
+                client.Send(message);
+                client.Disconnect(true);
+            }
 
             auction.StateId = (int)AuctionStates.Finished;
             if (context.SaveChanges() > 0)
