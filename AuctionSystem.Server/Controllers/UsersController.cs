@@ -40,6 +40,7 @@ namespace AuctionSystem.Server.Controllers
                 {
                     return Unauthorized("Please check I'm not a robot");
                 }
+                request.IPAddress = BitConverter.ToInt32(HttpContext.Connection.RemoteIpAddress.GetAddressBytes(), 0);
                 var response = this.service.Login(request);
                 
                 if (response.WronCredentials)

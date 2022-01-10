@@ -20,6 +20,7 @@ namespace AuctionSystem.Data.Model
         public virtual DbSet<Auction> Auctions { get; set; }
         public virtual DbSet<AuctionState> AuctionStates { get; set; }
         public virtual DbSet<Bid> Bids { get; set; }
+        public virtual DbSet<BlackListIp> BlackListIps { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -103,6 +104,19 @@ namespace AuctionSystem.Data.Model
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Bids_Users");
+            });
+
+            modelBuilder.Entity<BlackListIp>(entity =>
+            {
+                entity.ToTable("BlackListIPs");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Ipaddress).HasColumnName("IPAddress");
             });
 
             modelBuilder.Entity<Product>(entity =>

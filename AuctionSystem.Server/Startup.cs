@@ -23,6 +23,7 @@ namespace AuctionSystem.Server
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IBlackListService, BlackListService>();
             services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
             services.AddSignalR(options =>
             {
@@ -59,8 +60,8 @@ namespace AuctionSystem.Server
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
-            app.UseMiddleware<JWTMiddleware>();
+            app.UseCors();            
+            app.UseMiddleware<BlackListMiddleware>().UseMiddleware<JWTMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");

@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace AuctionSystem.Server.Services.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IService
     {
-        void SetContext(AuctionSystemContext context);
+        //void SetContext(AuctionSystemContext context);
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         IEnumerable<User> GetAll();
         User GetById(Guid id);

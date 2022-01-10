@@ -11,17 +11,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 
 namespace AuctionSystem.Server.Services
 {
     public class UserService : BaseService, IUserService
     {
         private readonly string lockoutReasonMessage = "Locked out: too many invalid login attempts";
-
-        public void SetContext(AuctionSystemContext context)
-        {
-            this.context = context;
-        }
 
         private readonly JWTSettings _jwtSettings;
 
@@ -32,6 +28,7 @@ namespace AuctionSystem.Server.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
+            Thread.Sleep(5000);
             var user = context.Users.SingleOrDefault(x => x.Username == model.Username);
 
             if (user == null)
@@ -47,6 +44,14 @@ namespace AuctionSystem.Server.Services
                         BanDate = DateTime.Now.AddDays(7),
                         BanReason = lockoutReasonMessage
                     };
+                    BlackListIp blackListIp = new BlackListIp()
+                    {
+                        Ipaddress = (int)model.IPAddress,                        
+                        Active = true,
+                        CreatedOn = DateTime.Now,
+                        Id = Guid.NewGuid()
+                    };
+                    context.BlackListIps.Add(blackListIp);                    
                     Ban(banRequest);
                     return new AuthenticateResponse(banRequest.BanDate, banRequest.BanReason);
                 }
