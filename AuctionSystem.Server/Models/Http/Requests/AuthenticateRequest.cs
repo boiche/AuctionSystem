@@ -9,6 +9,6 @@ namespace AuctionSystem.Server.Models.Http.Requests
         [Required]
         public string Password { get; set; }
         public bool Checked { get; set; }
-        public long IPAddress { get; set; }
+        public string IPAddress { get; set; }
     }
 }

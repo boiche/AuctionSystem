@@ -8,7 +8,7 @@ namespace AuctionSystem.Data.Model
     public partial class BlackListIp
     {
         public Guid Id { get; set; }
-        public int Ipaddress { get; set; }
+        public string Ipaddress { get; set; }
         public bool Active { get; set; }
         public DateTime CreatedOn { get; set; }
     }

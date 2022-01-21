@@ -18,7 +18,7 @@ namespace AuctionSystem.Server.Utils
         public async Task Invoke(HttpContext context, IBlackListService blackListService, Data.Model.AuctionSystemContext auctionSystemContext)
         {
             blackListService.SetContext(auctionSystemContext);
-            IPAddress clientRemoteAddress = context.Connection.RemoteIpAddress;            
+            var clientRemoteAddress = context.Request.HttpContext.Connection.RemoteIpAddress?.ToString();
             if (blackListService.IsInList(clientRemoteAddress))
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;

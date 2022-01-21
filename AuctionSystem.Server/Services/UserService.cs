@@ -46,7 +46,7 @@ namespace AuctionSystem.Server.Services
                     };
                     BlackListIp blackListIp = new BlackListIp()
                     {
-                        Ipaddress = (int)model.IPAddress,                        
+                        Ipaddress = model.IPAddress,                        
                         Active = true,
                         CreatedOn = DateTime.Now,
                         Id = Guid.NewGuid()

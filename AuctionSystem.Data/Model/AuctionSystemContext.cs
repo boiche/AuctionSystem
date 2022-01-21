@@ -116,7 +116,10 @@ namespace AuctionSystem.Data.Model
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Ipaddress).HasColumnName("IPAddress");
+                entity.Property(e => e.Ipaddress)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("IPAddress");
             });
 
             modelBuilder.Entity<Product>(entity =>

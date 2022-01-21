@@ -1,9 +1,5 @@
 ﻿using AuctionSystem.Server.Services.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace AuctionSystem.Server.Services
 {
@@ -14,9 +10,9 @@ namespace AuctionSystem.Server.Services
 
         }
 
-        public bool IsInList(IPAddress iPAddress)
-        {           
-            return context.BlackListIps.Select(x => x.Ipaddress).Contains(BitConverter.ToInt32(iPAddress.GetAddressBytes(), 0));
+        public bool IsInList(string iPAddress)
+        {
+            return context.BlackListIps.FirstOrDefault(x => x.Ipaddress == iPAddress) != null;
         }
     }
 }
